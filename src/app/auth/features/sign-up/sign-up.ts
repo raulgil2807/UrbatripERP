@@ -1,6 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import {
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { isRequired } from '../utils/validators';
 
 interface FormSignUp {
   email: FormControl<string | null>;
@@ -13,25 +18,28 @@ interface FormSignUp {
   imports: [ReactiveFormsModule],
   templateUrl: './sign-up.html',
 })
-
 export default class SignUp {
   private _formBuilder = inject(FormBuilder);
+
+  isRequired(field: 'email' | 'password') {
+    return isRequired(field, this.form);
+  }
 
   form = this._formBuilder.group<FormSignUp>({
     email: this._formBuilder.control('', [
       Validators.required,
-      Validators.email
+      Validators.email,
     ]),
     password: this._formBuilder.control('', Validators.required),
   });
 
   submit() {
-    if(this.form.invalid) return;
+    if (this.form.invalid) return;
 
     const { email, password } = this.form.value;
 
-    if(!email ||!password) return;
+    if (!email || !password) return;
 
-    console.log({email, password});
-}
+    console.log({ email, password });
+  }
 }

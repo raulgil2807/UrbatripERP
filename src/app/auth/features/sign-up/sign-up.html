@@ -22,7 +22,11 @@
         >
           Inicia sesión con tu cuenta.
         </h1>
-        <form class="space-y-4 md:space-y-6" [formGroup]="form" (ngSubmit)="submit()">
+        <form
+          class="space-y-4 md:space-y-6"
+          [formGroup]="form"
+          (ngSubmit)="submit()"
+        >
           <div>
             <label
               for="email"
@@ -37,6 +41,9 @@
               placeholder="name@company.com"
               formControlName="email"
             />
+            @if(isRequired('email')) {
+            <small class="text-red-400">Este campo es obligatorio</small>
+            }
           </div>
           <div>
             <label
@@ -52,6 +59,10 @@
               formControlName="password"
               class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+
+            @if(isRequired('password')) {
+            <small class="text-red-400">Este campo es obligatorio</small>
+            }
           </div>
           <button
             type="submit"
