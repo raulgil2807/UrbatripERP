@@ -6,6 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { isRequired } from '../utils/validators';
+import { AuthService } from '../../data-access/auth.service';
+import { toast } from 'ngx-sonner';
+import { Router, RouterLink } from '@angular/router';
 
 interface FormSignUp {
   email: FormControl<string | null>;
@@ -15,11 +18,13 @@ interface FormSignUp {
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './sign-up.html',
 })
 export default class SignUp {
   private _formBuilder = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
 
   isRequired(field: 'email' | 'password') {
     return isRequired(field, this.form);
@@ -33,13 +38,19 @@ export default class SignUp {
     password: this._formBuilder.control('', Validators.required),
   });
 
-  submit() {
+  async submit() {
     if (this.form.invalid) return;
+    try {
+      const { email, password } = this.form.value;
 
-    const { email, password } = this.form.value;
+      if (!email || !password) return;
 
-    if (!email || !password) return;
+      await this._authService.signUp({ email, password });
 
-    console.log({ email, password });
+      toast.success('Usuario creado correctamente');
+      this._router.navigateByUrl('/tasks');
+    } catch (error) {
+      toast.error('Ha ocurrido un error al crear el usuario');
+    }
   }
 }
