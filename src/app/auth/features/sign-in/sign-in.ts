@@ -40,9 +40,9 @@ export default class SignIn {
 
       if (!email || !password) return;
 
-      await this._authService.signUp({ email, password });
+      await this._authService.signIn({ email, password });
 
-      toast.success('Usuario creado correctamente');
+      toast.success('Hola nuevamente');
       this._router.navigateByUrl('/tasks');
     } catch (error) {
       toast.error('Ha ocurrido un error al crear el usuario');
